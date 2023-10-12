@@ -1,0 +1,66 @@
+﻿@model List<Web.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>Sản Phẩm</h2>
+
+<div class="dropdown mb-3">
+    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: 1px solid">
+        Sắp xếp theo
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/Home/Index?sortGia=giam&page=@ViewBag.Page">Giá giảm dần</a></li>
+        <li><a class="dropdown-item" href="/Home/Index?sortGia=tang&page=@ViewBag.Page">Giá tăng dần</a></li>
+    </ul>
+</div>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <a href="/Home/Detail/@product.Id">
+                    <img src="https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/42/289691/iphone-14-pro-vang-thumb-600x600.jpg" class="card-img-top mt-2">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title" style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@product.Name">@product.Name</h5>
+                    <p class="card-text text-danger">@product.Price.ToString("C")</p>
+                    <button class="btn btn-primary">Mua</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<nav>
+    <ul class="pagination d-flex justify-content-center">
+
+        <li class="page-item">
+            <a class="page-link" href="/Home/Index?page=@((ViewBag.Page - 1 <= 0) ? 0 : ViewBag.Page - 1)&sortGia=@ViewBag.Sort" aria-label="Previous">
+                <span aria-hidden="true">Pre</span>
+            </a>
+        </li>
+
+        @for (int i = 0; i < ViewBag.NumPages; i++)
+        {
+            if (ViewBag.Page - 1 == i)
+            {
+                <li class="page-item"><a class="page-link bg-primary text-white" href="/Home/Index?page=@(i + 1)&sortGia=@ViewBag.Sort">@(i + 1)</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Home/Index?page=@(i + 1)&sortGia=@ViewBag.Sort">@(i + 1)</a></li>
+            }
+        }
+
+        <li class="page-item">
+            <a class="page-link bg-primary text-white" href="/Home/Index?page=@((ViewBag.Page >= ViewBag.NumPages) ? ViewBag.NumPages : ViewBag.Page + 1)&sortGia=@ViewBag.Sort" aria-label="Next">
+                <span aria-hidden="true">Next</span>
+            </a>
+        </li>
+
+
+    </ul>
+</nav>
